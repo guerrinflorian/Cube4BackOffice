@@ -6,7 +6,7 @@
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
+        Une erreur est survenu.
       </div>
 
       <q-btn
@@ -14,8 +14,8 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
-        label="Go Home"
+        to="/home"
+        label="Retourner à l'accueil"
         no-caps
       />
     </div>

@@ -71,8 +71,8 @@ export default {
 
         const fetchItems = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/items');
-                items.value = response.data.filter(row => row.supprime === 0);
+                const response = await axios.get('http://localhost:8080/items');
+                items.value = response.data.filter(row => row.isDeleted === false);
             } catch (error) {
                 console.error('Erreur lors de la récupération des articles:', error);
             }
@@ -81,7 +81,9 @@ export default {
         onMounted(fetchItems);
 
         const itemOptions = computed(() =>
-            items.value.map(item => ({ label: item.nom, value: item.id }))
+        
+            items.value.map(item => ({ label: item.name, value: item.id }))
+            
         );
 
         const getItemName = (item) => {
@@ -108,8 +110,6 @@ export default {
                     const foundItem = items.value.find(i => i.id === item.value);
                     if (foundItem) {
                         itemQuantitiesBefore[item.value] = foundItem.quantite_enregistree;
-                        console.log(itemQuantities)
-                        console.log(itemQuantitiesBefore)
                     } else {
                         console.error('Article non trouvé pour l\'ID:', item.value);
                     }

@@ -1,10 +1,10 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated v-if="showToolbar">
-      <q-toolbar style="background-color: rgb(24, 24, 26);">
+      <q-toolbar style="background-color: rgb(0, 0, 0);">
         <q-img
           src="../assets/logo_negosud.png"
-          style="height: 45px; max-width: 45px"
+          style="height: 36px; max-width: 36px"
         />
 
         <q-toolbar-title>
@@ -71,8 +71,14 @@ const linksList = [
   {
     title: 'Sous Familles',
     caption: 'Sous Familles de vins',
-    icon: 'diversity_3',
+    icon: 'group',
     to: '/sousfamilies'
+  },
+  {
+    title: 'Maisons',
+    caption: 'Maisons de vins',
+    icon: 'roofing',
+    to: '/houses'
   },
   {
     title: 'Fournisseurs',
