@@ -56,12 +56,6 @@ const linksList = [
     icon: 'emoji_symbols',
     to: '/items'
   },
-  {
-    title: 'Suivi de stock',
-    caption: 'Voir le suivi du stock des articles',
-    icon: 'data_thresholding',
-    to: '/suivistock'
-  },
     {
     title: 'Inventaires',
     caption: 'Faire un inventaire',

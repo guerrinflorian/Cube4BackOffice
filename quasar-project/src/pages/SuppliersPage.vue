@@ -3,18 +3,18 @@
     <q-dialog v-model="addDialog">
       <q-card>
         <q-card-section>
-          <q-input v-model="newSupplier.nom" label="Nom" :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="newSupplier.nom_entreprise" label="Nom Entreprise"
+          <q-input v-model="newSupplier.name" label="Nom" :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
+          <q-input v-model="newSupplier.companyName" label="Nom Entreprise"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="newSupplier.courriel" label="Email"
+          <q-input v-model="newSupplier.email" label="Email"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="newSupplier.numero_telephone" label="Téléphone"
+          <q-input v-model="newSupplier.phone" label="Téléphone"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Annuler" v-close-popup />
           <q-btn
-            :disable="!newSupplier.nom || !newSupplier.courriel || !newSupplier.numero_telephone || !newSupplier.nom_entreprise"
+            :disable="!newSupplier.name || !newSupplier.email || !newSupplier.phone || !newSupplier.companyName"
             label="Ajouter" color="primary" @click="createSupplier" />
         </q-card-actions>
       </q-card>
@@ -23,18 +23,18 @@
     <q-dialog v-model="editDialog" v-if="selectedSupplier">
       <q-card>
         <q-card-section>
-          <q-input v-model="editedSupplier.nom" label="Nom" :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="editedSupplier.nom_entreprise" label="Nom Entreprise"
+          <q-input v-model="editedSupplier.name" label="Nom" :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
+          <q-input v-model="editedSupplier.companyName" label="Nom Entreprise"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="editedSupplier.courriel" label="Email"
+          <q-input v-model="editedSupplier.email" label="Email"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
-          <q-input v-model="editedSupplier.numero_telephone" label="Téléphone"
+          <q-input v-model="editedSupplier.phone" label="Téléphone"
             :rules="[val => !!val || 'Le champ ne peut pas être vide']" />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="Annuler" v-close-popup />
           <q-btn
-            :disable="!editedSupplier.nom || !editedSupplier.courriel || !editedSupplier.numero_telephone || !editedSupplier.nom_entreprise"
+            :disable="!editedSupplier.name || !editedSupplier.email || !editedSupplier.phone || !editedSupplier.companyName"
             label="Modifier" color="primary" @click="confirmEdit" />
         </q-card-actions>
       </q-card>
@@ -47,11 +47,11 @@
           <q-td auto-width>
             <q-expansion-item expand-separator icon="more_horiz">
               <template v-slot:header>
-                <div class="text-h6">{{ props.row.nom }}</div>
+                <div class="text-h6">{{ props.row.name }}</div>
               </template>
-              <div>Nom Entreprise: {{ props.row.nom_entreprise }}</div>
-              <div>Email: {{ props.row.courriel }}</div>
-              <div>Téléphone: {{ props.row.numero_telephone }}</div>
+              <div>Nom Entreprise: {{ props.row.companyName }}</div>
+              <div>Email: {{ props.row.email }}</div>
+              <div>Téléphone: {{ props.row.phone }}</div>
 
               <q-btn flat icon="edit" @click="openEditDialog(props.row)" label="Modifier" class="q-mt-md" />
               <q-btn flat icon="delete" @click="deleteSupplier(props.row)" label="Supprimer" class="q-mt-md" />
@@ -72,17 +72,18 @@ export default {
   setup() {
     const $q = useQuasar();
     const suppliers = ref([]);
-    const columns = ref([{ name: 'nom', label: 'Nom', align: 'left', field: 'nom' }]);
+    const columns = ref([{ name: 'name', label: 'Nom', align: 'left', field: 'name' }]);
     const addDialog = ref(false);
     const editDialog = ref(false);
     const selectedSupplier = ref(null);
-    const newSupplier = ref({ nom: '', nom_entreprise: '', courriel: '', numero_telephone: '' });
-    const editedSupplier = ref({ nom: '', nom_entreprise: '', courriel: '', numero_telephone: '' });
+    const newSupplier = ref({ name: '', companyName: '', email: '', phone: '' });
+    const editedSupplier = ref({ name: '', companyName: '', email: '', phone: '' });
 
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/suppliers');
-        suppliers.value = response.data.filter(supplier => supplier.supprime === 0);
+        const response = await axios.get('http://localhost:8080/suppliers');
+        console.log(response.data)
+        suppliers.value = response.data.filter(supplier => supplier.isDeleted === false);
         console.log(suppliers.value)
       } catch (error) {
         console.error('Erreur lors de la récupération des fournisseurs:', error);
@@ -91,8 +92,8 @@ export default {
 
     const createSupplier = async () => {
       try {
-        await axios.post('http://localhost:3000/suppliers', newSupplier.value);
-        newSupplier.value = { nom: '', nom_entreprise: '', courriel: '', numero_telephone: '' };
+        await axios.post('http://localhost:8080/suppliers', newSupplier.value);
+        newSupplier.value = { name: '', companyName: '', email: '', phone: '' };
         addDialog.value = false;
         $q.notify({ color: 'positive', message: 'Fournisseur ajouté avec succès' });
         fetchSuppliers();  // rafraichir les données
@@ -110,7 +111,7 @@ export default {
 
     const confirmEdit = async () => {
       try {
-        await axios.put(`http://localhost:3000/suppliers/${selectedSupplier.value.id}`, editedSupplier.value);
+        await axios.put(`http://localhost:8080/suppliers/${selectedSupplier.value.id}`, editedSupplier.value);
         editDialog.value = false;
         $q.notify({ color: 'positive', message: 'Fournisseur modifié avec succès' });
         fetchSuppliers();  // rafraichir les données
@@ -123,7 +124,7 @@ export default {
 
     const deleteSupplier = async (supplier) => {
       try {
-        await axios.delete(`http://localhost:3000/suppliers/${supplier.id}`);
+        await axios.delete(`http://localhost:8080/suppliers/${supplier.id}`);
         $q.notify({ color: 'positive', message: 'Fournisseur marqué comme supprimé' });
         fetchSuppliers();  // rafraichir les données
       } catch (error) {

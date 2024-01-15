@@ -12,7 +12,6 @@ const routes = [
       { path: '/sousfamilies', name: 'sousfamilies', component: () => import('pages/SubFamiliesPage.vue') },
       { path: '/suppliers', name: 'suppliers', component: () => import('pages/SuppliersPage.vue') },
       { path: '/orders', name: 'orders', component: () => import('pages/OrdersPage.vue') },
-      { path: '/suivistock', name: 'suivistock', component: () => import('pages/SuiviStockPage.vue') },
       { path: '/inventories', name: 'inventories', component: () => import('pages/InventoryPage.vue') },
     ]
   },

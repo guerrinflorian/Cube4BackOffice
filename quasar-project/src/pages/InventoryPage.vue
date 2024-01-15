@@ -18,41 +18,40 @@
     </div>
 
     <q-dialog v-model="showResultsModal" full-width>
-    <q-card>
-        <q-card-section class="bg-primary text-white">
-            <div class="text-h6">Résultats de l'inventaire</div>
-        </q-card-section>
+        <q-card>
+            <q-card-section class="bg-primary text-white">
+                <div class="text-h6">Résultats de l'inventaire</div>
+            </q-card-section>
 
-        <q-card-section>
-            <div class="row text-bold">
-                <div class="col-3">Article</div>
-                <div class="col-2 text-center">Stock Informatique</div>
-                <div class="col-2 text-center">Stock Réel</div>
-                <div class="col-2 text-center">Écart</div>
-                <div class="col-3 text-center">Stock Après Inventaire</div>
-            </div>
-        </q-card-section>
-
-        <q-card-section>
-            <div v-for="item in selectedItems" :key="item.value" class="row items-center q-mb-sm">
-                <div class="col-3 flex items-center" :class="{'bg-green': itemQuantities[item.value] == itemQuantitiesBefore[item.value], 'bg-red': itemQuantities[item.value] != itemQuantitiesBefore[item.value]}" >
-                    <q-icon name="science" class="q-mr-sm"></q-icon>
-                    {{ getItemName(item) }}
+            <q-card-section>
+                <div class="row text-bold">
+                    <div class="col-3">Article</div>
+                    <div class="col-2 text-center">Stock Informatique</div>
+                    <div class="col-2 text-center">Stock Réel</div>
+                    <div class="col-2 text-center">Écart</div>
+                    <div class="col-3 text-center">Stock Après Inventaire</div>
                 </div>
-                <div class="col-2 text-center">{{ itemQuantitiesBefore[item.value] }}</div>
-                <div class="col-2 text-center">{{ itemQuantities[item.value] }}</div>
-                <div class="col-2 text-center">{{ itemQuantities[item.value] - itemQuantitiesBefore[item.value] }}</div>
-                <div class="col-3 text-center">{{ itemQuantities[item.value] }}</div>
-            </div>
-        </q-card-section>
+            </q-card-section>
 
-        <q-card-actions align="right">
-            <q-btn flat label="Fermer" color="primary" v-close-popup></q-btn>
-        </q-card-actions>
-    </q-card>
-</q-dialog>
+            <q-card-section>
+                <div v-for="item in selectedItems" :key="item.value" class="row items-center q-mb-sm">
+                    <div class="col-3 flex items-center"
+                        :class="{ 'bg-green': itemQuantities[item.value] == itemQuantitiesBefore[item.value], 'bg-red': itemQuantities[item.value] != itemQuantitiesBefore[item.value] }">
+                        <q-icon name="science" class="q-mr-sm"></q-icon>
+                        {{ getItemName(item) }}
+                    </div>
+                    <div class="col-2 text-center">{{ itemQuantitiesBefore[item.value] }}</div>
+                    <div class="col-2 text-center">{{ itemQuantities[item.value] }}</div>
+                    <div class="col-2 text-center">{{ itemQuantities[item.value] - itemQuantitiesBefore[item.value] }}</div>
+                    <div class="col-3 text-center">{{ itemQuantities[item.value] }}</div>
+                </div>
+            </q-card-section>
 
-
+            <q-card-actions align="right">
+                <q-btn flat label="Fermer" color="primary" v-close-popup></q-btn>
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>  
 
   
@@ -97,7 +96,7 @@ export default {
             }
 
             // verif si chaque article sélectionné a une quantité valide
-            return selectedItems.value.every(item => {               
+            return selectedItems.value.every(item => {
                 const quantity = itemQuantities[item.value];
                 return quantity !== null && quantity !== '' && !isNaN(quantity);
             });
@@ -226,5 +225,4 @@ export default {
 .bg-red {
     background-color: #ff1744 !important;
 }
-
 </style>

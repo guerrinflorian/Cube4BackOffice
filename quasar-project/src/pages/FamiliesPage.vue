@@ -21,7 +21,7 @@
             <div v-for="category in categories" :key="category.id" class="category-card q-mb-md">
                 <q-card>
                     <q-card-section>
-                        {{ category.nom }}
+                        {{ category.name }}
                     </q-card-section>
                     <q-card-actions align="right">
                         <q-btn flat icon="edit" @click="openEditDialog(category)" />
@@ -48,8 +48,9 @@ export default {
 
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/families');
-                categories.value = response.data.filter(category => category.supprime === 0);
+                const response = await axios.get('http://localhost:8080/categories');
+                categories.value = response.data.filter(category => category.isDeleted === false);
+                console.log(categories.value)
             } catch (error) {
                 console.error('Erreur lors de la récupération des familles:', error);
             }
@@ -61,7 +62,7 @@ export default {
                 return;
             }
             try {
-                const response = await axios.post('http://localhost:3000/families', { name: newCategoryName.value });
+                const response = await axios.post('http://localhost:8080/categories', { name: newCategoryName.value });
                 await fetchCategories();
                 $q.notify({
                     color: 'positive',
@@ -78,7 +79,7 @@ export default {
 
         const openEditDialog = (category) => {
             selectedCategory.value = category;
-            editedName.value = category.nom;
+            editedName.value = category.name;
             editDialog.value = true;
         };
 
@@ -88,7 +89,7 @@ export default {
                 return;
             }
             try {
-                await axios.put(`http://localhost:3000/families/${selectedCategory.value.id}`, { name: editedName.value });
+                await axios.put(`http://localhost:8080/categories/${selectedCategory.value.id}`, { name: editedName.value });
                 editDialog.value = false;
                 await fetchCategories();
                 $q.notify({
