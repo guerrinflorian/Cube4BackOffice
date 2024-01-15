@@ -3,7 +3,7 @@
         <q-btn label="Ajouter un article" icon="add" color="primary" class="q-mb-md ma10 q-ma-sm"
             @click="openCreateModal" />
         <q-table :rows="rows" :columns="columns" row-key="id" :filter="filter" :visible-columns="visibleColumns"
-            virtual-scroll v-model:pagination="pagination" :rows-per-page-options="[0]">
+            virtual-scroll class="my-sticky-column-table" v-model:pagination="pagination" :rows-per-page-options="[0]">
             <template v-slot:top>
                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
                     <template v-slot:append>
@@ -355,7 +355,7 @@ export default {
                 buyPrice: editingRow.value.buyPrice,
                 cartonPrice: editingRow.value.cartonPrice,
                 trending: editingRow.value.trending,
-                saveQuantity: editingRow.value.saveQuantity,
+                saveQuantity: 0,
                 minOrderThreshold: editingRow.value.minOrderThreshold,
                 autoOrder: editingRow.value.autoOrder,
                 house: editingRow.value.house,
@@ -449,7 +449,7 @@ export default {
             try {
                 const response = await axios.put(`http://localhost:8080/items/${finalData.id}`, finalData);
 
-                if (response.data.success) {
+                if (response.status === 200) {
 
                     $q.notify({
                         color: 'green-4',
@@ -457,8 +457,7 @@ export default {
                         icon: 'check',
                         message: 'Modification réussie!'
                     });
-
-                    fetchArticles();
+                   
                 } else {
                     $q.notify({
                         color: 'red-4',
@@ -478,6 +477,7 @@ export default {
             }
 
             editDialog.value = false;
+            fetchArticles();
         };
 
         // Fonction pour ouvrir la boîte de dialogue de suppression
@@ -582,5 +582,37 @@ export default {
 .modal-content {
     max-height: calc(95vh - 50px);
     overflow: none;
+}
+
+.my-sticky-column-table {
+    height: calc(103vh - 150px);
+}
+.my-sticky-column-table thead tr:first-child th:first-child {
+  color: white;
+  background-color: #00b4ff;
+}
+
+.my-sticky-column-table thead tr:first-child th:first-child {
+  color: white;
+  background-color: #00b4ff;
+}
+
+.my-sticky-column-table td:first-child {
+    color: white;
+  background-color: #00b4ff;
+}
+
+.my-sticky-column-table th:first-child {
+    color: white;
+  background-color: #00b4ff;
+}
+.my-sticky-column-table td:first-child {
+  font-weight: bold;
+  color: white;
+  min-width: 100px;
+  max-width: 300px;
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
 </style>
